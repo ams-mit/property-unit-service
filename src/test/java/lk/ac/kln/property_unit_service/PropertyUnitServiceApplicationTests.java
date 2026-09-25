@@ -6,11 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Disabled;
 
 @SpringBootTest
-@Disabled("Disabled until CI test environment is configured")
+@Disabled("Disabled until CI test environment (DB/Keys) is configured")
 class PropertyUnitServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
 	}
-
 }
