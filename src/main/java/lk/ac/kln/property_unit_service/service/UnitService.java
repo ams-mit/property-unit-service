@@ -19,7 +19,7 @@ public class UnitService {
     @Transactional
     public Unit updateUnitStatus(Long unitId, UnitStatus newStatus) {
         Unit unit = unitRepository.findById(unitId)
-                .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
+                .orElseThrow(() -> new lk.ac.kln.property_unit_service.exception.UnitNotFoundException(unitId));
 
         UnitStatus currentStatus = unit.getStatus();
 
