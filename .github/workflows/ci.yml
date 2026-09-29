@@ -40,3 +40,5 @@ jobs:
 
       - name: Build and Test
         run: mvn clean verify
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/property_db
