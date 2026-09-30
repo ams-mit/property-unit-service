@@ -57,7 +57,7 @@ class UnitType {
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=20) RecordStatus status=RecordStatus.ACTIVE;
     @CreationTimestamp @Column(name="created_at") Instant createdAt;
     @UpdateTimestamp @Column(name="updated_at") Instant updatedAt;
-    UUID getPublicId(){return publicId;} RecordStatus getStatus(){return status;}
+    UUID getPublicId(){return publicId;} RecordStatus getStatus(){return status;} Integer getCapacity(){return capacity;}
 }
 
 @Entity @Table(name="units")

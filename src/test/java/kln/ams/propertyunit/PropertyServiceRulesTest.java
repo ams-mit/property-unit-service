@@ -58,6 +58,16 @@ class PropertyServiceRulesTest {
         ApiException error=assertThrows(ApiException.class,()->service.units(0,20,null,null,null,null,null,null));
         assertEquals(HttpStatus.FORBIDDEN,error.status);verifyNoInteractions(units);
     }
+    @Test void validationReadsCapacityThroughLazyUnitTypeProxy() {
+        Unit unit=activeUnit();unit.floor.publicId=UUID.randomUUID();
+        // A lazy Hibernate proxy leaves its fields null and only loads data through getters.
+        UnitType proxy=mock(UnitType.class);UUID typeId=UUID.randomUUID();
+        when(proxy.getCapacity()).thenReturn(3);when(proxy.getPublicId()).thenReturn(typeId);
+        unit.unitType=proxy;
+        when(units.findByPublicId(unit.publicId)).thenReturn(Optional.of(unit));
+        UnitValidation validation=service.validation(unit.publicId);
+        assertEquals(3,validation.capacity());assertEquals(typeId,validation.unitTypeId());
+    }
     private Unit activeUnit() {
         Building building=new Building();Floor floor=new Floor();floor.building=building;
         Unit unit=new Unit();unit.id=1L;unit.publicId=UUID.randomUUID();unit.floor=floor;return unit;
