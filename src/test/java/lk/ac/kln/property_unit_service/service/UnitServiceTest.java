@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
+import lk.ac.kln.property_unit_service.model.enums.UnitStatus;
 
 @ExtendWith(MockitoExtension.class)
 class UnitServiceTest {
@@ -48,7 +49,7 @@ class UnitServiceTest {
 
     @Test
     void changeStatus_rejectsMaintenanceUnit() {
-        unit.setStatus("UNDER_MAINTENANCE");
+        unit.setStatus(UnitStatus.UNDER_MAINTENANCE);
         when(units.findByPublicId(unitId)).thenReturn(Optional.of(unit));
 
         assertThatThrownBy(() -> service.changeStatus(unitId, "OCCUPIED"))
