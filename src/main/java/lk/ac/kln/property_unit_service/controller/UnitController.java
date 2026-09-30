@@ -89,7 +89,7 @@ public class UnitController {
     public record UnitView(UUID unitId, Long floorId, Long unitTypeId, String unitNumber, String status) {
         static UnitView from(Unit unit) {
             return new UnitView(unit.getPublicId(), unit.getFloor().getId(), unit.getUnitType().getId(),
-                    unit.getUnitNumber(), unit.getStatus());
+                unit.getUnitNumber(), unit.getStatus().name());
         }
     }
 }
