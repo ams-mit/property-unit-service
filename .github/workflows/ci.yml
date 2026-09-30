@@ -38,5 +38,21 @@ jobs:
           cache: maven
           cache-dependency-path: '**/pom.xml'
 
+      - name: Grant MySQL user access from localhost
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -prootpassword -e \
+            "CREATE USER IF NOT EXISTS 'property_user'@'localhost' IDENTIFIED BY 'property_pass'; \
+             GRANT ALL PRIVILEGES ON property_db.* TO 'property_user'@'localhost'; \
+             FLUSH PRIVILEGES;"
+
       - name: Build and Test
         run: mvn clean verify
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/property_db
+
+      - name: Upload Surefire Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports
