@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -23,20 +24,26 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_id", nullable = false)
-    private Building building;
+    @Column(name = "public_id", nullable = false, unique = true, updatable = false)
+    private UUID publicId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "building_id") 
+    private Building building;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "floor_id", nullable = false)
     private Floor floor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "unit_type_id", nullable = false)
     private UnitType unitType;
 
+    @Column(name = "unit_number", nullable = false, length = 50)
+    private String unitNumber;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, length = 30)
     @Builder.Default
     private UnitStatus status = UnitStatus.AVAILABLE;
 
