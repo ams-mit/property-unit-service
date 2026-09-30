@@ -1,0 +1,13 @@
+ALTER TABLE buildings ADD COLUMN public_id BINARY(16) NULL, ADD COLUMN description VARCHAR(500) NULL, ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE';
+UPDATE buildings SET public_id = UUID_TO_BIN(UUID()) WHERE public_id IS NULL;
+ALTER TABLE buildings MODIFY public_id BINARY(16) NOT NULL, ADD CONSTRAINT uk_buildings_public_id UNIQUE (public_id);
+ALTER TABLE floors ADD COLUMN public_id BINARY(16) NULL, ADD COLUMN description VARCHAR(500) NULL, ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE', ADD COLUMN created_at TIMESTAMP NULL, ADD COLUMN updated_at TIMESTAMP NULL;
+UPDATE floors SET public_id = UUID_TO_BIN(UUID()) WHERE public_id IS NULL;
+ALTER TABLE floors MODIFY public_id BINARY(16) NOT NULL, ADD CONSTRAINT uk_floors_public_id UNIQUE (public_id), ADD CONSTRAINT uk_floor_building_number UNIQUE (building_id, floor_number);
+ALTER TABLE unit_types ADD COLUMN public_id BINARY(16) NULL, ADD COLUMN code VARCHAR(50) NULL, ADD COLUMN description VARCHAR(500) NULL, ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE', ADD COLUMN created_at TIMESTAMP NULL, ADD COLUMN updated_at TIMESTAMP NULL;
+UPDATE unit_types SET public_id = UUID_TO_BIN(UUID()), code = CONCAT('LEGACY-', id) WHERE public_id IS NULL;
+ALTER TABLE unit_types MODIFY public_id BINARY(16) NOT NULL, MODIFY code VARCHAR(50) NOT NULL, ADD CONSTRAINT uk_unit_types_public_id UNIQUE (public_id), ADD CONSTRAINT uk_unit_types_code UNIQUE (code);
+ALTER TABLE units ADD COLUMN created_at TIMESTAMP NULL, ADD COLUMN updated_at TIMESTAMP NULL;
+ALTER TABLE ownerships ADD COLUMN public_id BINARY(16) NULL, ADD COLUMN status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE', ADD COLUMN created_at TIMESTAMP NULL, ADD COLUMN updated_at TIMESTAMP NULL;
+UPDATE ownerships SET public_id = UUID_TO_BIN(UUID()) WHERE public_id IS NULL;
+ALTER TABLE ownerships MODIFY public_id BINARY(16) NOT NULL, ADD CONSTRAINT uk_ownerships_public_id UNIQUE (public_id);

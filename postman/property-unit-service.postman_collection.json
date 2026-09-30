@@ -1,0 +1,410 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "name": "Project A Property Unit Service"
+  },
+  "item": [
+    {
+      "name": "PROP-001",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/buildings",
+        "body": {
+          "raw": "{\"buildingCode\":\"B-A\",\"name\":\"Building A\",\"address\":\"Complex\",\"floors\":[{\"floorNumber\":1,\"name\":\"First\"}]}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "mode": "raw"
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-002",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/buildings",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-003",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/unit-types",
+        "body": {
+          "raw": "{\"code\":\"TWO_BEDROOM\",\"name\":\"Two Bedroom\",\"capacity\":4}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "mode": "raw"
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-004",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/unit-types",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-005",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/units",
+        "body": {
+          "raw": "{\"unitNumber\":\"A-101\",\"buildingId\":\"{{buildingId}}\",\"floorId\":\"{{floorId}}\",\"unitTypeId\":\"{{unitTypeId}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "mode": "raw"
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-006",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/units",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-007",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/ownerships",
+        "body": {
+          "raw": "{\"unitId\":\"{{unitId}}\",\"ownerId\":\"{{ownerId}}\",\"ownershipPercentage\":100,\"startDate\":\"2026-09-01\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          },
+          "mode": "raw"
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-008",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/ownerships",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-INT-001",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/internal/units/{{unitId}}/exists",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-INT-002",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/internal/units/{{unitId}}/validate",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-INT-003",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/internal/units/{{unitId}}/ownership",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PROP-INT-004",
+      "event": [
+        {
+          "script": {
+            "exec": [
+              "pm.test(\"standard envelope\", function () { const body=pm.response.json(); pm.expect(body).to.have.property(\"success\"); pm.expect(body).to.have.property(\"requestId\"); pm.expect(body).to.have.property(\"timestamp\"); });"
+            ],
+            "type": "text/javascript"
+          },
+          "listen": "test"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/internal/units/{{unitId}}/status",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{gatewayJwt}}"
+          },
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}"
+          }
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "gatewayJwt",
+      "value": ""
+    },
+    {
+      "key": "requestId",
+      "value": "contract-check"
+    }
+  ]
+}
