@@ -50,7 +50,7 @@ public class UnitController {
 
     @ExceptionHandler(InvalidStatusTransitionException.class)
     public ResponseEntity<Map<String, String>> handleInvalidStatusTransition(InvalidStatusTransitionException ex) {
-        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));}
     private final UnitRepository units;
     private final FloorRepository floors;
     private final UnitTypeRepository types;
