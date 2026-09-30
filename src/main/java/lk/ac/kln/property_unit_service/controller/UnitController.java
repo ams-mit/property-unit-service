@@ -34,9 +34,15 @@ import org.springframework.web.server.ResponseStatusException;
 public class UnitController {
 
     private final UnitService unitService;
+    private final UnitRepository units;
+    private final FloorRepository floors;
+    private final UnitTypeRepository types;
 
-    public UnitController(UnitService unitService) {
+    public UnitController(UnitService unitService, UnitRepository units, FloorRepository floors, UnitTypeRepository types) {
         this.unitService = unitService;
+        this.units = units;
+        this.floors = floors;
+        this.types = types;
     }
 
     @PatchMapping("/{id}/status")
@@ -50,15 +56,7 @@ public class UnitController {
 
     @ExceptionHandler(InvalidStatusTransitionException.class)
     public ResponseEntity<Map<String, String>> handleInvalidStatusTransition(InvalidStatusTransitionException ex) {
-        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));}
-    private final UnitRepository units;
-    private final FloorRepository floors;
-    private final UnitTypeRepository types;
-
-    public UnitController(UnitRepository units, FloorRepository floors, UnitTypeRepository types) {
-        this.units = units;
-        this.floors = floors;
-        this.types = types;
+        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 
     @PostMapping
