@@ -49,3 +49,10 @@ jobs:
         run: mvn clean verify
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/property_db
+
+      - name: Upload Surefire Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports
