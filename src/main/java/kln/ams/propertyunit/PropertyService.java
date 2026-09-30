@@ -109,7 +109,7 @@ class PropertyService {
     @Transactional(readOnly=true) Unit unit(UUID id) {return units.findByPublicId(id).orElseThrow(()->missing("UNIT_NOT_FOUND","Unit not found"));}
     @Transactional(readOnly=true) boolean exists(UUID id) {return units.findByPublicId(id).isPresent();}
     @Transactional(readOnly=true) UnitValidation validation(UUID id) {
-        Unit u=unit(id);return new UnitValidation(id,true,u.status,available(u),u.getFloor().getBuilding().getPublicId(),u.getFloor().getPublicId(),u.getUnitType().getPublicId(),u.getUnitType().capacity);
+        Unit u=unit(id);return new UnitValidation(id,true,u.status,available(u),u.getFloor().getBuilding().getPublicId(),u.getFloor().getPublicId(),u.getUnitType().getPublicId(),u.getUnitType().getCapacity());
     }
     @Transactional(readOnly=true) UnitStatusView status(UUID id) {
         Unit u=unit(id);return new UnitStatusView(id,u.status,available(u));
