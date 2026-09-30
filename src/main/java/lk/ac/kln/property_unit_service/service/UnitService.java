@@ -3,8 +3,10 @@ package lk.ac.kln.property_unit_service.service;
 import java.time.LocalDate;
 import java.util.UUID;
 import lk.ac.kln.property_unit_service.dto.UnitContract;
+import lk.ac.kln.property_unit_service.exception.InvalidStatusTransitionException;
 import lk.ac.kln.property_unit_service.model.Ownership;
 import lk.ac.kln.property_unit_service.model.Unit;
+import lk.ac.kln.property_unit_service.model.enums.UnitStatus;
 import lk.ac.kln.property_unit_service.repository.OwnershipRepository;
 import lk.ac.kln.property_unit_service.repository.UnitRepository;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,32 @@ public class UnitService {
         this.ownerships = ownerships;
     }
 
+    @Transactional
+    public Unit updateUnitStatus(Long unitId, UnitStatus newStatus) {
+        Unit unit = units.findById(unitId)
+                .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
+
+        UnitStatus currentStatus = unit.getStatus();
+
+        // Enforce strict state machine for Unit status
+        boolean isValid = switch (currentStatus) {
+            case AVAILABLE -> newStatus == UnitStatus.RESERVED;
+            case RESERVED -> newStatus == UnitStatus.OCCUPIED;
+            case OCCUPIED -> newStatus == UnitStatus.UNDER_MAINTENANCE || newStatus == UnitStatus.INACTIVE;
+            case UNDER_MAINTENANCE -> newStatus == UnitStatus.AVAILABLE;
+            case INACTIVE -> false; // No permitted transitions from INACTIVE
+        };
+
+        if (!isValid) {
+            throw new InvalidStatusTransitionException(
+                    String.format("Invalid status transition from %s to %s", currentStatus, newStatus)
+            );
+        }
+
+        unit.setStatus(newStatus);
+        return units.save(unit);
+    }
+
     @Transactional(readOnly = true)
     public UnitContract.Details details(UUID unitId) {
         Unit unit = find(unitId);
@@ -32,7 +60,7 @@ public class UnitService {
                 .map(this::parseUuid)
                 .filter(id -> id != null)
                 .findFirst().orElse(null);
-        return new UnitContract.Details(unitId, unit.getStatus(), unit.getUnitType().getCapacityLimit(), ownerId);
+        return new UnitContract.Details(unitId, unit.getStatus().name(), unit.getUnitType().getCapacityLimit(), ownerId);
     }
 
     @Transactional(readOnly = true)
@@ -48,13 +76,16 @@ public class UnitService {
                     "Lease service may only set OCCUPIED or AVAILABLE");
         }
         Unit unit = find(unitId);
-        if ("UNDER_MAINTENANCE".equals(unit.getStatus()) || "INACTIVE".equals(unit.getStatus())) {
+        
+        // Updated to use your UnitStatus Enum instead of Strings
+        if (UnitStatus.UNDER_MAINTENANCE == unit.getStatus() || UnitStatus.INACTIVE == unit.getStatus()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Unit is unavailable");
         }
         if ("OCCUPIED".equals(status) && unit.getUnitType().getCapacityLimit() <= 0) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Unit has no occupancy capacity");
         }
-        unit.setStatus(status);
+        
+        unit.setStatus(UnitStatus.valueOf(status));
         units.save(unit);
         return details(unitId);
     }

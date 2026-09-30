@@ -1,5 +1,13 @@
 package lk.ac.kln.property_unit_service.controller;
 
+import lk.ac.kln.property_unit_service.dto.UnitStatusUpdateRequest;
+import lk.ac.kln.property_unit_service.exception.InvalidStatusTransitionException;
+import lk.ac.kln.property_unit_service.model.Unit;
+import lk.ac.kln.property_unit_service.service.UnitService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,14 +32,31 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/v1/units")
 public class UnitController {
+
+    private final UnitService unitService;
     private final UnitRepository units;
     private final FloorRepository floors;
     private final UnitTypeRepository types;
 
-    public UnitController(UnitRepository units, FloorRepository floors, UnitTypeRepository types) {
+    public UnitController(UnitService unitService, UnitRepository units, FloorRepository floors, UnitTypeRepository types) {
+        this.unitService = unitService;
         this.units = units;
         this.floors = floors;
         this.types = types;
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Unit> updateUnitStatus(
+            @PathVariable Long id,
+            @RequestBody UnitStatusUpdateRequest request) {
+        
+        Unit updatedUnit = unitService.updateUnitStatus(id, request.getNewStatus());
+        return ResponseEntity.ok(updatedUnit);
+    }
+
+    @ExceptionHandler(InvalidStatusTransitionException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidStatusTransition(InvalidStatusTransitionException ex) {
+        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
     }
 
     @PostMapping
@@ -62,7 +87,7 @@ public class UnitController {
     public record UnitView(UUID unitId, Long floorId, Long unitTypeId, String unitNumber, String status) {
         static UnitView from(Unit unit) {
             return new UnitView(unit.getPublicId(), unit.getFloor().getId(), unit.getUnitType().getId(),
-                    unit.getUnitNumber(), unit.getStatus());
+                unit.getUnitNumber(), unit.getStatus().name());
         }
     }
 }

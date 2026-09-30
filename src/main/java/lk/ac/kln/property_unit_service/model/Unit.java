@@ -1,25 +1,35 @@
 package lk.ac.kln.property_unit_service.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lk.ac.kln.property_unit_service.model.enums.UnitStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "units")
 public class Unit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "public_id", nullable = false, unique = true, updatable = false)
     private UUID publicId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "building_id") 
+    private Building building;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "floor_id", nullable = false)
@@ -32,18 +42,16 @@ public class Unit {
     @Column(name = "unit_number", nullable = false, length = 50)
     private String unitNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)
-    private String status = "AVAILABLE";
+    @Builder.Default
+    private UnitStatus status = UnitStatus.AVAILABLE;
 
-    public Long getId() { return id; }
-    public UUID getPublicId() { return publicId; }
-    public void setPublicId(UUID publicId) { this.publicId = publicId; }
-    public Floor getFloor() { return floor; }
-    public void setFloor(Floor floor) { this.floor = floor; }
-    public UnitType getUnitType() { return unitType; }
-    public void setUnitType(UnitType unitType) { this.unitType = unitType; }
-    public String getUnitNumber() { return unitNumber; }
-    public void setUnitNumber(String unitNumber) { this.unitNumber = unitNumber; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
